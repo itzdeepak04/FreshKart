@@ -15,7 +15,7 @@ const port=process.env.PORT || 8000;
 await dbConnection();
 await connectCloudinary();
 // Allow multiple origins
-const allowedOrigins=['http://localhost:5173']
+const allowedOrigins=['http://localhost:5173','https://freshkart-seven.vercel.app']
 
 //Middleware Configuration
 app.use(express.json());
