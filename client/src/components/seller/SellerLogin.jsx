@@ -8,10 +8,12 @@ function SellerLogin() {
     const { isSeller, setIsSeller, navigate, axios } = useAppContext();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // console.log({email,password});
 
     async function handleSubmit(e) {
         try {
             e.preventDefault();
+            // console.log({email,password});
             const {data}=await axios.post('/api/seller/login',{email,password});
             if(data.status)
             {

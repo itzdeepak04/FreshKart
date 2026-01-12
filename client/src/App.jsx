@@ -27,7 +27,7 @@ function App() {
     <div className='text-default min-h-screen text-gray-700 bg-white'>
       {isSellerPath ? null : <Navbar />}
       {showUserLogin ? <Login /> : null}
-      <Toaster toastOptions={{ duration: 1000 }} />
+      <Toaster toastOptions={{ duration: 1500 }} />
       <div className={`${isSellerPath ? '' : 'px-6 md:px-16 lg:px-24'}`}>
         <Routes>
           <Route path='/' element={<Home />} />

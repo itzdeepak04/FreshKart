@@ -35,7 +35,7 @@ function MyOrders() {
         <p className='text-2xl font-medium uppercase'>My Orders</p>
         <div className='w-16 h-0.5 bg-primary rounded-full'></div>
         </div>
-        {myOrders?.map((order,ind)=>(
+        {myOrders.length > 0 ? (myOrders?.map((order,ind)=>(
             <div key={ind} className='border border-gray-300 rounded-lg mb-10 p-4 py-5 max-w-4xl'>
                 <p className='flex justify-between md:items-center text-gray-400 md:font-medium max-md:flex-col'>
                     <span>OrderId : {order?._id}</span>
@@ -66,7 +66,7 @@ function MyOrders() {
                     </div>
                 ))}
             </div>
-        ))}
+        ))) : (<h1>No orders Placed</h1>)}
     </div>
   )
 }

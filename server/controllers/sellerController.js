@@ -8,7 +8,7 @@ export async function sellerLogin(req, res) {
             return res.json({ status: false, message: 'Missing Details' })
         }
 
-        if (email === process.env.SELLER_EMAIL && password === process.env.SELLER_Password) {
+        if (email === process.env.SELLER_EMAIL && password === process.env.SELLER_PASSWORD) {
             const token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '7d' });
             res.cookie('sellerToken', token,
                 {

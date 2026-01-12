@@ -52,6 +52,7 @@ function AddAddress() {
     useEffect(()=>{
         if(!user)
         {
+            toast.error('Please login to add address')
             navigate('/cart')
         }
     },[])
