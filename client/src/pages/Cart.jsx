@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import { assets} from "../assets/assets";
+import { assets } from "../assets/assets";
 import toast from "react-hot-toast";
 function Cart() {
     const { products, currency, cartItems, removeFromCart, getCartCount, updateCartItem, navigate, getCartAmount, axios, user, setCartItems } = useAppContext();
@@ -8,6 +8,8 @@ function Cart() {
     const [addresses, setAddresses] = useState([]);
     const [showAddress, setShowAddress] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState(null);
+    const [loading, setLoading] = useState(false);
+
 
 
     function getCart() {
@@ -38,28 +40,33 @@ function Cart() {
         }
     }
 
-    async function placeOrder()
-    {
+    async function placeOrder() {
+        if (loading) return;
+        setLoading(true);
         try {
-            if(!selectedAddress)
-            {
-                return toast.error('Please select an address')
+            if (!selectedAddress) {
+                toast.error('Please select an address');
+                setLoading(false);
+                return;
             }
 
             //COD
-            const {data}=await axios.post('/api/order/cod',{userId : user?._id, items:cartArray?.map(item=>({product:item._id, quantity:item.quantity})), address: selectedAddress._id});
-            if(data.status)
-            {
+            const { data } = await axios.post('/api/order/cod', { userId: user?._id, items: cartArray?.map(item => ({ product: item._id, quantity: item.quantity })), address: selectedAddress._id });
+            if (data.status) {
+                alert('Clicked');
                 toast.success(data.message);
                 setCartItems({});
-                navigate('/my-orders') 
+                navigate('/my-orders')
             }
             // else
             // {
             //     toast.error(data.message);
             // }
         } catch (error) {
-                toast.error(error.message);
+            toast.error(error.message);
+        }
+        finally {
+            setLoading(false);
         }
 
     }
@@ -75,6 +82,13 @@ function Cart() {
             getUserAddress();
         }
     }, [user])
+
+    useEffect(() => {
+        const close = () => setShowAddress(false);
+        if (showAddress) document.addEventListener('click', close);
+        return () => document.removeEventListener('click', close);
+    }, [showAddress]);
+
 
     return products.length > 0 && cartItems ? (
         <div className="flex flex-col md:flex-row mt-30">
@@ -136,7 +150,7 @@ function Cart() {
                             Change
                         </button>
                         {showAddress && (
-                            <div className="absolute z-50 top-12 py-1 bg-white border border-gray-300 text-sm w-full">
+                            <div onClick={(e) => e.stopPropagation()} className="absolute z-50 top-12 py-1 bg-white border text-sm w-full">
                                 {addresses.map((address, ind) => (
                                     <p key={ind} onClick={() => { setShowAddress(false); setSelectedAddress(address) }} className="text-gray-500 cursor-pointer p-2 hover:bg-gray-100">
                                         {address.street}, {address.city}, {address.state}, {address.country}
@@ -171,8 +185,8 @@ function Cart() {
                     </p>
                 </div>
 
-                <button onClick={placeOrder} className="w-full py-3 mt-6 cursor-pointer bg-primary text-white font-medium hover:bg-primary-dull transition">
-                    Place Order
+                <button type="button" onClick={placeOrder} className="w-full py-3 mt-6 bg-primary text-white font-medium hover:bg-primary-dull transition">
+                    {loading ? 'Placing Order' : 'Place Order'}
                 </button>
             </div>
         </div>
