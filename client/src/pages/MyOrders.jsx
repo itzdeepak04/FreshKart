@@ -57,7 +57,7 @@ function MyOrders() {
                         <div className='flex flex-col justify-center md:ml-8 mb-4 md:mb-0'>
                             <p>Quantity: {item?.quantity || '1'}</p>
                             <p>Status: {order?.status}</p>
-                            <p>Date: {new Date(order.cratedAt).toLocaleDateString()}</p>
+                            <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
                         </div>
 
                         <p className='text-primary text-lg font-medium'>
