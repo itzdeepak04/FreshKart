@@ -43,11 +43,11 @@ function Cart() {
         try {
             if(!selectedAddress)
             {
-                toast.error('Please select an address')
+                return toast.error('Please select an address')
             }
 
             //COD
-            const {data}=await axios.post('/api/order/cod',{userId : user?._id, items:cartArray?.map(item=>({product:item?._id, quantity:item.quantity})), address: selectedAddress?._id});
+            const {data}=await axios.post('/api/order/cod',{userId : user?._id, items:cartArray?.map(item=>({product:item._id, quantity:item.quantity})), address: selectedAddress._id});
             if(data.status)
             {
                 toast.success(data.message);
@@ -136,7 +136,7 @@ function Cart() {
                             Change
                         </button>
                         {showAddress && (
-                            <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
+                            <div className="absolute z-50 top-12 py-1 bg-white border border-gray-300 text-sm w-full">
                                 {addresses.map((address, ind) => (
                                     <p key={ind} onClick={() => { setShowAddress(false); setSelectedAddress(address) }} className="text-gray-500 cursor-pointer p-2 hover:bg-gray-100">
                                         {address.street}, {address.city}, {address.state}, {address.country}
