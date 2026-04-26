@@ -1,5 +1,6 @@
 import React from "react";
 import { useAppContext } from "../../context/AppContext";
+import { assets } from "../../assets/assets";
 import toast from "react-hot-toast";
 function ProductList(){
 
@@ -10,6 +11,22 @@ function ProductList(){
             const {data}=await axios.post('/api/product/stock', {id, inStock})
             if(data.status)
             {
+                fetchProducts();
+                toast.success(data.message);
+            }
+            else
+            {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
+
+    async function removeProduct(id){
+        try {
+            const {data}=await axios.delete(`api/product/remove/${id}`);
+            if(data.status){
                 fetchProducts();
                 toast.success(data.message);
             }
@@ -33,6 +50,7 @@ function ProductList(){
                                 <th className="px-4 py-3 font-semibold truncate">Category</th>
                                 <th className="px-4 py-3 font-semibold truncate hidden md:block">Selling Price</th>
                                 <th className="px-4 py-3 font-semibold truncate">In Stock</th>
+                                <th className="px-4 py-3 font-semibold truncate">Remove</th>
                             </tr>
                         </thead>
                         <tbody className="text-sm text-gray-500">
@@ -52,6 +70,12 @@ function ProductList(){
                                             <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
                                             <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
                                         </label>
+                                    </td>
+                                    <td className="px-8 py-3">
+                                        <button onClick={()=>removeProduct(product._id)} 
+                                            className="cursor-pointer mx-auto">
+                                                <img src={assets.remove_icon} alt="remove" className="inline-block w-6 h-6" />
+                                        </button>
                                     </td>
                                 </tr>
                             ))}

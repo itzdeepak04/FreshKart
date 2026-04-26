@@ -26,7 +26,7 @@ function AllProducts() {
 
 
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-5 mt-6'>
-                {filteredProducts.filter(prod=>prod.inStock).map((product,ind)=><ProductCard key={ind} product={product} />)}
+                {(filteredProducts.length<=0 && searchQuery.length>0)?'No such product found' : filteredProducts.filter(prod=>prod.inStock).map((product,ind)=><ProductCard key={ind} product={product} />)}
         </div>
     </div>
   )

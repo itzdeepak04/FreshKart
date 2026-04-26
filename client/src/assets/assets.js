@@ -1,4 +1,3 @@
-import fabicon from './Fabicon.png';
 import logo from "./NavbarLogo.png";
 import search_icon from "./search_icon.svg";
 import remove_icon from "./remove_icon.svg";
@@ -8,6 +7,7 @@ import star_dull_icon from "./star_dull_icon.svg";
 import cart_icon from "./cart_icon.svg";
 import nav_cart_icon from "./nav_cart_icon.svg";
 import add_icon from "./add_icon.svg";
+import cross_icon from './cross_icon.png';
 import refresh_icon from "./refresh_icon.svg";
 import product_list_icon from "./product_list_icon.svg";
 import order_icon from "./order_icon.svg";
@@ -72,7 +72,6 @@ import brown_rice_image from "./brown_rice_image.png";
 import barley_image from "./barley_image.png";
 
 export const assets = {
-  fabicon,
   logo,
   search_icon,
   remove_icon,
@@ -82,6 +81,7 @@ export const assets = {
   cart_icon,
   nav_cart_icon,
   add_icon,
+  cross_icon,
   refresh_icon,
   product_list_icon,
   order_icon,

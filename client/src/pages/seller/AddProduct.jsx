@@ -1,61 +1,52 @@
 import React, { useState } from 'react'
 import { assets, categories } from '../../assets/assets';
 import { useAppContext } from '../../context/AppContext';
+import * as Yup from 'yup';
+import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
 
+const validationSchema = Yup.object({
+    name: Yup.string().required('Required'),
+    description: Yup.string().required('Required').min(20).max(100),
+    category: Yup.string().required('Required'),
+    price: Yup.number().required('Required').positive('Price must be positive'),
+    offerPrice: Yup.number().required('Required').positive('OfferPrice must be positive')
+})
+
 function AddProduct() {
-    const { axios } = useAppContext();
-
     const [files, setFiles] = useState([]);
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [category, setCategory] = useState('');
-    const [price, setPrice] = useState('');
-    const [offerPrice, setOfferPrice] = useState('');
     const [loading, setLoading] = useState(false);
+    const { axios,fetchProducts } = useAppContext();
+    const {values,errors,touched,handleChange,handleBlur,handleSubmit,resetForm} = useFormik({
+        initialValues: { name: '', description: '', category: '', price: 0, offerPrice: 0 },
+        validationSchema,
+        onSubmit: submitHandler
+    })
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        if (loading) return;
-
+    async function submitHandler(values) {
+        if(loading) return;
         try {
             setLoading(true);
-
-            const productData = {
-                name,
-                description: description.split('\n'),
-                category,
-                price,
-                offerPrice
-            };
+            const productData = { ...values, description: values.description.split('\n') };
 
             const formData = new FormData();
-            formData.append('productData', JSON.stringify(productData));
-
-            for (let i = 0; i < files.length; i++) {
-                if (files[i]) {
-                    formData.append('images', files[i]);
-                }
-            }
-
+            formData.append("productData", JSON.stringify(productData));
+            files.forEach(file => { if (file) formData.append('images',file) });
             const { data } = await axios.post('/api/product/add', formData);
 
             if (data.status) {
                 toast.success(data.message);
-                setName('');
-                setDescription('');
-                setCategory('');
-                setPrice('');
-                setOfferPrice('');
+                resetForm();
                 setFiles([]);
+                await fetchProducts();
             } else {
                 toast.error(data.message);
             }
-
         } catch (error) {
+            console.log(error.message);
             toast.error(error.message);
-        } finally {
+        }
+        finally {
             setLoading(false);
         }
     }
@@ -99,15 +90,18 @@ function AddProduct() {
                         Product Name
                     </label>
                     <input
-                        onChange={(e) => setName(e.target.value)}
-                        value={name}
+                        name='name'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.name}
                         id="product-name"
                         type="text"
                         placeholder="Type here"
-                        className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                        required
+                        className={`outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40
+                                    ${touched.name && errors.name ? "border-red-500" : "border-gray-200"}`}
                         disabled={loading}
                     />
+                    {(touched.name && errors.name) && <p className="text-red-500 text-sm z-50">{errors.name}</p>}
                 </div>
 
                 <div className="flex flex-col gap-1 max-w-md">
@@ -115,14 +109,18 @@ function AddProduct() {
                         Product Description
                     </label>
                     <textarea
-                        onChange={(e) => setDescription(e.target.value)}
-                        value={description}
+                        name='description'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.description}
                         id="product-description"
                         rows={4}
-                        className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none"
+                        className={`outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none
+                                    ${touched.description && errors.description ? "border-red-500" : "border-gray-200"}`}
                         placeholder="Type here"
                         disabled={loading}
                     />
+                    {(touched.description && errors.description) && <p className="text-red-500 text-sm z-50">{errors.description}</p>}
                 </div>
 
                 <div className="w-full flex flex-col gap-1">
@@ -130,11 +128,14 @@ function AddProduct() {
                         Category
                     </label>
                     <select
-                        onChange={(e) => setCategory(e.target.value)}
-                        value={category}
+                        name='category'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.category}
                         id="category"
-                        className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                        disabled={loading} required
+                        className={`outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40
+                                    ${touched.category && errors.category ? "border-red-500" : "border-gray-200"}`}
+                        disabled={loading}
                     >
                         <option value="">Select Category</option>
                         {categories.map((item, index) => (
@@ -143,6 +144,7 @@ function AddProduct() {
                             </option>
                         ))}
                     </select>
+                    {(touched.category && errors.category) && <p className="text-red-500 text-sm z-50">{errors.category}</p>}
                 </div>
 
                 <div className="flex items-center gap-5 flex-wrap">
@@ -151,15 +153,18 @@ function AddProduct() {
                             Product Price
                         </label>
                         <input
-                            onChange={(e) => setPrice(e.target.value)}
-                            value={price}
+                            name='price'
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.price}
                             id="product-price"
                             type="number"
                             placeholder="0"
-                            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                            required
+                            className={`outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40
+                                        ${touched.price && errors.price ? "border-red-500" : "border-gray-200"}`}
                             disabled={loading}
                         />
+                        {(touched.price && errors.price) && <p className="text-red-500 text-sm z-50">{errors.price}</p>}
                     </div>
 
                     <div className="flex-1 flex flex-col gap-1 w-32">
@@ -167,19 +172,23 @@ function AddProduct() {
                             Offer Price
                         </label>
                         <input
-                            onChange={(e) => setOfferPrice(e.target.value)}
-                            value={offerPrice}
+                            name='offerPrice'
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.offerPrice}
                             id="offer-price"
                             type="number"
                             placeholder="0"
-                            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-                            required
+                            className={`outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40
+                                        ${touched.offerPrice && errors.offerPrice ? "border-red-500" : "border-gray-200"}`}
                             disabled={loading}
                         />
+                        {(touched.offerPrice && errors.offerPrice) && <p className="text-red-500 text-sm z-50">{errors.offerPrice}</p>}
                     </div>
                 </div>
 
                 <button
+                    type='submit'
                     disabled={loading}
                     className={`px-8 py-2.5 text-white font-medium rounded cursor-pointer
                         ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary'}`}

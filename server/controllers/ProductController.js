@@ -70,3 +70,14 @@ export async function changeStock(req,res)
     }
     
 }
+
+
+export async function removeProduct(req,res){
+    try {
+        const {id}=req.params;
+        await PRODUCT.findByIdAndDelete({_id:id});
+        return res.json({status:true, message:'Item removed'});
+    } catch (error) {
+        return res.json({status:false,message:error.message});
+    }
+}
