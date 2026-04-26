@@ -14,6 +14,7 @@ export function AppContextWrapper({ children }) {
     const [isSeller, setIsSeller] = useState(false);
     const [showUserLogin, setShowUserLogin] = useState(false);
     const [products, setProducts] = useState([]);
+    const [loading,setLoading]=useState(true);
 
     const [cartItems, setCartItems] = useState({});
     const [searchQuery, setSearchQuery] = useState('');
@@ -71,6 +72,8 @@ export function AppContextWrapper({ children }) {
     // Add Products to cart
     function addToCart(itemId) {
         let cartData = structuredClone(cartItems);
+        if(!user)
+            return toast.error('Please Login to add Product')
         if (cartData[itemId]) {
             cartData[itemId] += 1;
         }
@@ -93,19 +96,25 @@ export function AppContextWrapper({ children }) {
     function removeFromCart(itemId) {
         let cartData = structuredClone(cartItems);
         if (cartData[itemId]) {
-            cartData[itemId] -= 1;
-            if (cartData[itemId] === 0) {
                 delete cartData[itemId];
-            }
         }
         toast.success('Removed from cart');
         setCartItems(cartData);
     }
 
+    async function fetchInitialData(){
+        try {
+            await Promise.all([fetchSeller(),fetchUser(),fetchProducts()]);
+        } catch (error) {
+            toast.error(error.message);
+        }
+        finally{
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
-        fetchSeller();
-        fetchUser();
-        fetchProducts();
+        fetchInitialData();
     }, []);
 
     //Update cartItem in Database
@@ -119,12 +128,8 @@ export function AppContextWrapper({ children }) {
             {
                 toast.error(data.message);
             }
-            else
-            {
-                toast.error(error.message);
-            }
         } catch (error) {
-            
+            toast.error(error.message);
         }
     }
     if(user)
@@ -155,7 +160,7 @@ export function AppContextWrapper({ children }) {
         }
         return Math.floor(totalAmount * 100) / 100;
     }
-    const value = { navigate, user, setUser, isSeller, setIsSeller, showUserLogin, setShowUserLogin, products, currency, cartItems,setCartItems, addToCart, updateCartItem, removeFromCart, searchQuery, setSearchQuery, getCartCount, getCartAmount, axios, fetchProducts };
+    const value = { navigate, user, setUser, isSeller, setIsSeller, showUserLogin, setShowUserLogin, products, currency, cartItems,setCartItems, addToCart, updateCartItem, removeFromCart, searchQuery, setSearchQuery, getCartCount, getCartAmount, axios, fetchProducts,loading};
     return (
 
         <AppContext.Provider value={value}>

@@ -3,11 +3,12 @@ import { NavLink } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
+import SellerLayout from '../pages/seller/SellerLayout'
+import SellerLogin from './seller/SellerLogin'
 
 function Navbar() {
     const [open, setOpen] = useState(false)
     const [openProfile, setOpenProfile] = useState(false)
-
     const {
         user,
         setUser,
@@ -16,9 +17,10 @@ function Navbar() {
         searchQuery,
         setSearchQuery,
         getCartCount,
-        axios
-    } = useAppContext()
-
+        axios,
+        isSeller
+    } = useAppContext();
+    
     async function logout() {
         try {
             const { data } = await axios.get('/api/user/logout')
@@ -61,7 +63,7 @@ function Navbar() {
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/products">All Products</NavLink>
                     <NavLink to="/contact">Contact</NavLink>
-
+                    <NavLink className='border border-primary text-primary rounded-xl text-sm px-4 py-1 cursor-pointer' to='/seller'>Seller</NavLink>
                     {/* Search */}
                     <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
                         <input
@@ -86,7 +88,7 @@ function Navbar() {
                     {!user ? (
                         <button
                             onClick={() => setShowUserLogin(true)}
-                            className="px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full"
+                            className="cursor-pointer px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full"
                         >
                             Login
                         </button>

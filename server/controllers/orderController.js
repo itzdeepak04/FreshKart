@@ -72,6 +72,17 @@ export async function getAllOrders(req, res) {
 }
 
 
+export async function deleteOrder(req,res){
+    try {
+        const {id}=req.params;
+        console.log('Hii');
+        await ORDER.findByIdAndDelete({_id:id});
+        return res.json({ status: true, message:'Order detail deleted ' });
+    } catch (error) {
+        return res.json({ status: false, message: error.message });
+    }
+}
+
 
 // let amount = await items.reduce(async(acc,item)=>{
 //     const product=await PRODUCT.findById(item.product);

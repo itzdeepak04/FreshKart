@@ -22,13 +22,18 @@ import Orders from './pages/seller/Orders.jsx'
 
 function App() {
   const isSellerPath = useLocation().pathname.includes('seller');
-  const { showUserLogin, isSeller } = useAppContext();
+  const { showUserLogin, isSeller, loading } = useAppContext();
+  if (loading) {
+    return (<div className="bg-transparent flex justify-center items-center h-screen">
+      <div className="w-10 h-10 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+    </div>)
+  }
   return (
-    <div className='text-default min-h-screen text-gray-700 bg-white'>
+    <div className='text-default min-h-screen flex flex-col text-gray-700 bg-white'>
       {isSellerPath ? null : <Navbar />}
       {showUserLogin ? <Login /> : null}
       <Toaster toastOptions={{ duration: 1500 }} />
-      <div className={`${isSellerPath ? '' : 'px-6 md:px-16 lg:px-24'}`}>
+      <div className={`flex-grow ${isSellerPath ? '' : 'px-6 md:px-16 lg:px-24'}`}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/products' element={<AllProducts />} />
@@ -39,8 +44,8 @@ function App() {
           <Route path='/my-orders' element={<MyOrders />} />
           <Route path='/seller' element={isSeller ? <SellerLayout /> : <SellerLogin />}>
             <Route index element={isSeller ? <AddProduct /> : null} />
-            <Route path='product-list' element={<ProductList/>} />
-            <Route path='orders' element={<Orders/>} />
+            <Route path='product-list' element={<ProductList />} />
+            <Route path='orders' element={<Orders />} />
           </Route>
           <Route path='/contact' element={<Contact />} />
           <Route path='*' element={<PageNotFound />} />

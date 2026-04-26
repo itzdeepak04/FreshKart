@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="#16a34a"></rect>
+
+  <!-- Cart -->
+  <path d="M16 24 H48 L44 40 H22 Z" fill="#ffffff"></path>
+
+  <!-- Wheels -->
+  <circle cx="26" cy="46" r="3" fill="#064e3b"></circle>
+  <circle cx="40" cy="46" r="3" fill="#064e3b"></circle>
+
+  <!-- Handle -->
+  <line x1="16" y1="24" x2="12" y2="16" stroke="#ffffff" stroke-width="3" stroke-linecap="round"></line>
+
+  <!-- Apple -->
+  <circle cx="34" cy="22" r="5" fill="#ef4444"></circle>
+
+  <!-- Apple leaf -->
+  <path d="M34 16 C38 12, 42 16, 34 20 C26 16, 30 12, 34 16 Z" fill="#bbf7d0"></path>
+</svg>

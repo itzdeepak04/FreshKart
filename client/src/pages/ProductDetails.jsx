@@ -5,7 +5,7 @@ import { useAppContext } from "../context/AppContext";
 import ProductCard from "../components/ProductCard";
 function ProductDetails() {
 
-    const { products, navigate, currency, addToCart } = useAppContext();
+    const { products, navigate, currency, addToCart,user } = useAppContext();
     const { category, id } = useParams();
     const [status,setStatus]=useState('add');
 
@@ -18,6 +18,7 @@ function ProductDetails() {
         if(status=='add')
         {
             addToCart(product._id);
+            if(user)
             setStatus('go')
         }
         else
@@ -37,6 +38,14 @@ function ProductDetails() {
     useEffect(() => {
         setThumbnail(product?.image[0] ? product?.image[0] : null)
     }, [product])
+
+
+    function handleBuyNow(productId){
+        addToCart(productId);
+        if(user){
+            navigate('/cart');
+        }
+    }
 
     return product && (
         <div className="mt-12">
@@ -89,7 +98,7 @@ function ProductDetails() {
                         <button onClick={handleCart} className="w-full py-3.5 cursor-pointer font-medium bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition" >
                             {status == 'add' ? 'Add to Cart' : 'View Cart'}
                         </button>
-                        <button onClick={() => { addToCart(product._id); navigate('/cart') }} className="w-full py-3.5 cursor-pointer font-medium bg-primary text-white hover:bg-primary-dull transition" >
+                        <button onClick={() => handleBuyNow(product._id)} className="w-full py-3.5 cursor-pointer font-medium bg-primary text-white hover:bg-primary-dull transition" >
                             Buy now
                         </button>
                     </div>

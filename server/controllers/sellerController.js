@@ -48,7 +48,7 @@ export async function sellerLogout(req, res) {
                 sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
             }
         );
-        return res.json({ status: true, message: 'Logged out' })
+        return res.json({ status: true, message: 'Seller logged out' })
     } catch (error) {
         console.log(error.message);
         return res.json({ status: false, message: error.message });

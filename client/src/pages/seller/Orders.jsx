@@ -24,9 +24,28 @@ function Orders() {
         }
     }
 
+    async function deleteOrder(id){
+        try {
+            const {data}=await axios.delete(`/api/order/${id}`);
+            if(data.status){
+                await fetchOrders();
+                toast.success(data.message);
+            }
+            else
+            {
+                toast.error(data.message)
+            }
+        } catch (error) {
+                        toast.error(error.message);  
+        }
+    }
+
     useEffect(() => {
         fetchOrders();
     }, [])
+    if(orders.length<=0){
+        return(<h1 className='p-10'>No Order details are found</h1>)
+    }
     return (
         <div className='no-scrollbar flex-1 h-[95vh] overflow-y-scroll'>
             <div className="md:p-10 p-4 space-y-4">
@@ -61,6 +80,13 @@ function Orders() {
                             <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
                             <p>Payment: {order.isPaid ===true  ? "Paid" : "Pending"}</p>
                         </div>
+
+                        <button
+                            onClick={()=>deleteOrder(order._id)}
+                            className="cursor-pointer px-8 py-2 bg-red-500 hover:bg-red-600 transition text-white rounded-lg"
+                        >
+                            Delete
+                        </button>
                     </div>
                 ))}
             </div>
