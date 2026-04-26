@@ -12,7 +12,7 @@ export async function dbConnection()
         console.log('Database connected');
         
     } catch (error) {
-        console.log('Database not connected')
+        console.log('Database not connected', error.message);
         
     }
 }
