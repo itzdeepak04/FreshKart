@@ -21,7 +21,6 @@ export async function authUser(req,res,next)
         }
         next();
     } catch (error) {
-        console.log(error.message);
         return res.json({status:false, message:error.message});
     }
 }

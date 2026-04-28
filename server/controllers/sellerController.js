@@ -24,7 +24,6 @@ export async function sellerLogin(req, res) {
             return res.json({ status: false, message: 'Invalid Credentials' });
         }
     } catch (error) {
-            console.log(error.message);
             return res.json({ status: false, message: error.message });
     }
 }
@@ -34,7 +33,6 @@ export async function isSellerAuth(req, res) {
     try {
         return res.json({ status: true});
     } catch (error) {
-        console.log(error.message);
         return res.json({ status: false, message: error.message });
     }
 }
@@ -50,7 +48,6 @@ export async function sellerLogout(req, res) {
         );
         return res.json({ status: true, message: 'Seller logged out' })
     } catch (error) {
-        console.log(error.message);
         return res.json({ status: false, message: error.message });
     }
 }

@@ -26,7 +26,6 @@ export async function placeOrderCOD(req, res) {
         await ORDER.create({ userId, items, amount, address, paymentType: 'COD' });
         return res.json({ status: true, message: 'Order placed Successfully' })
     } catch (error) {
-        console.log(error.message);
         return res.json({ status: false, message: error.message });
 
 
@@ -49,7 +48,6 @@ export async function getUserOrders(req, res) {
 
         return res.json({ status: true, orders });
     } catch (error) {
-        console.log(error.message);
         return res.json({ status: false, message: error.message });
     }
 }
@@ -66,7 +64,6 @@ export async function getAllOrders(req, res) {
 
         return res.json({ status: true, orders });
     } catch (error) {
-        console.log(error.message);
         return res.json({ status: false, message: error.message });
     }
 }
@@ -75,7 +72,6 @@ export async function getAllOrders(req, res) {
 export async function deleteOrder(req,res){
     try {
         const {id}=req.params;
-        console.log('Hii');
         await ORDER.findByIdAndDelete({_id:id});
         return res.json({ status: true, message:'Order detail deleted ' });
     } catch (error) {

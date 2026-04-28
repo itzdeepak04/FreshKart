@@ -21,7 +21,6 @@ export async function addProduct(req,res)
 
         return res.json({status:true, message:'Product added'});
     } catch (error) {
-        console.log(error.message);
         return res.json({status:false,message:error.message});
     }
 }
@@ -35,7 +34,6 @@ export async function productList(req,res)
        return res.json({status:true, products});
         
     } catch (error) {
-        console.log(error.message);
         return res.json({status:false,message:error.message});
     }
     
@@ -50,7 +48,6 @@ export async function productById(req,res)
         return res.json({status:true, product});
         
     } catch (error) {
-        console.log(error.message);
         return res.json({status:false,message:error.message});
     }
     
@@ -65,7 +62,6 @@ export async function changeStock(req,res)
         return res.json({status:true, message:'Stock Updated'});
         
     } catch (error) {
-        console.log(error.message);
         return res.json({status:false,message:error.message});
     }
     

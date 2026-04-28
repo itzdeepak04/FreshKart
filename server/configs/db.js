@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { config } from "dotenv";
+import dns from 'dns';
+dns.setServers(['8.8.8.8']);
 
 config();
 const URL=process.env.MONGODB_URI;

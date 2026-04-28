@@ -17,7 +17,6 @@ export async function authSeller(req, res, next) {
             return res.json({ status: false, message: 'Not Authorized' });
         }
     } catch (error) {
-        console.log(error.message);
         return res.json({ status: false, message: error.message });
     }
 }

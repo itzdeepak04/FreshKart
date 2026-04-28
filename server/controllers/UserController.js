@@ -32,7 +32,6 @@ export async function register(req, res) {
 
 
     } catch (error) {
-        console.log(error.message)
         return res.json({ status: false, message: error.message });
     }
 }
@@ -63,7 +62,6 @@ export async function login(req, res) {
 
         return res.json({ status: true, message: 'User logged in successfull', user: { email: isUser.email, name: isUser.name } });
     } catch (error) {
-        console.log(error.message)
         return res.json({ status: false, message: error.message });
     }
 }
@@ -76,7 +74,6 @@ export async function isAuth(req, res) {
         const user = await USER.findById(userId).select("-password");
         return res.json({ status: true, user });
     } catch (error) {
-        console.log(error.message);
         return res.json({ status: false, message: error.message });
     }
 }
@@ -94,7 +91,6 @@ export async function logout(req, res) {
         );
         return res.json({ status: true, message: 'Logged out' })
     } catch (error) {
-        console.log(error.message);
         return res.json({ status: false, message: error.message });
     }
 }
